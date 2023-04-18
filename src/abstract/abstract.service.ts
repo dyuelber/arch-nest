@@ -1,15 +1,16 @@
-import { Injectable } from '@nestjs/common';
 import { Model, ObjectId } from 'mongoose';
 import { AbstractInterface } from './abstract.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Abstract } from './abstract.schema';
 
-@Injectable()
-export class AbstractService implements AbstractInterface {
-  constructor(@InjectModel(Abstract.name) protected model: Model<any>) {}
+export abstract class AbstractService implements AbstractInterface {
+  protected model: Model<any>;
+
+  constructor(@InjectModel(Abstract.name) model: any) {
+    this.model = model;
+  }
 
   find(filter: any): any {
-    console.log(filter);
     return this.model.find({ filters: filter });
   }
 
