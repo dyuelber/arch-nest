@@ -1,5 +1,4 @@
-export interface UsersInterface {
+export interface IUsers {
   name: string;
-  teste: string;
   age: string;
 }
