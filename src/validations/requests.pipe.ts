@@ -2,7 +2,7 @@ import {
   PipeTransform,
   Injectable,
   ArgumentMetadata,
-  BadRequestException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { ObjectSchema } from 'joi';
 
@@ -14,7 +14,12 @@ export class RequestsPipe implements PipeTransform {
     const { error } = this.schema.validate(value);
 
     if (error) {
-      throw new BadRequestException('Validation failed');
+      // fix message error
+      throw new UnprocessableEntityException({
+        message: 'Validation failed',
+        error,
+        metadata,
+      });
     }
 
     return value;
