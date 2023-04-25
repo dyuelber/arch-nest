@@ -37,7 +37,15 @@ export abstract class AbstractController {
   async create(@Body() params: any): Promise<any> {
     new RequestsPipe(this.createValidation).transform(params, null);
 
-    return this.service.create(params);
+    try {
+      this.service.begin();
+      const response = await this.service.create(params);
+      await this.service.commit();
+
+      return response;
+    } catch (error) {
+      await this.service.rollback();
+    }
   }
 
   @Put(':id')
@@ -48,12 +56,28 @@ export abstract class AbstractController {
   ): Promise<any> {
     new RequestsPipe(this.updateValidation).transform(params, null);
 
-    return this.service.update(id, params);
+    try {
+      this.service.begin();
+      const response = await this.service.update(id, params);
+      await this.service.commit();
+
+      return response;
+    } catch (error) {
+      await this.service.rollback();
+    }
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
   async delete(@Param('id') id: string | ObjectId): Promise<any> {
-    return this.service.delete(id);
+    try {
+      this.service.begin();
+      const response = this.service.delete(id);
+      await this.service.commit();
+
+      return response;
+    } catch (error) {
+      await this.service.rollback();
+    }
   }
 }

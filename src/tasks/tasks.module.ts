@@ -4,12 +4,15 @@ import { ActiveUsersService } from './active-users.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Users, UsersSchema } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
+import { EventsModule } from '../events/events.module';
+import { NewUser } from 'src/events/new-user.event';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Users.name, schema: UsersSchema }]),
+    EventsModule,
   ],
   controllers: [],
-  providers: [UsersService, DisableUsersService, ActiveUsersService],
+  providers: [UsersService, DisableUsersService, ActiveUsersService, NewUser],
 })
 export class TasksModule {}
