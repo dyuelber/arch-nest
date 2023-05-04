@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { AbstractService } from './abstract.service';
 import { ObjectId } from 'mongoose';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { RequestsPipe } from 'src/validations/requests.pipe';
+import { AuthGuard } from '../guards/auth.guard';
+import { RequestsPipe } from '../validations/requests.pipe';
 import Joi from 'joi';
 
 export abstract class AbstractController {

@@ -2,7 +2,6 @@ import { ListenerModule } from './listeners/listener.module';
 import { EventsModule } from './events/events.module';
 import { TasksModule } from './tasks/tasks.module';
 import { AbstractModule } from './abstract/abstract.module';
-import { SolidModule } from './solid/solid.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -19,7 +18,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     EventsModule,
     TasksModule,
     AbstractModule,
-    SolidModule,
     UsersModule,
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGO_URL),
