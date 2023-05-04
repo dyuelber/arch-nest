@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { AbstractController } from 'src/abstract/abstract.controller';
+import { AbstractController } from '../abstract/abstract.controller';
 import { createUser } from './validations/create';
 
 @Controller('users')

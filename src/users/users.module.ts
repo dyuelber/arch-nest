@@ -4,7 +4,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { Module } from '@nestjs/common';
 import { EventsModule } from '../events/events.module';
-import { NewUser } from 'src/events/new-user.event';
+import { NewUser } from '../events/new-user.event';
 
 @Module({
   imports: [

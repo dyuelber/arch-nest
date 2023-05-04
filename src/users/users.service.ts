@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
-import { AbstractService } from 'src/abstract/abstract.service';
+import { AbstractService } from '../abstract/abstract.service';
 import { Users } from './entities/user.entity';
 import { NewUser } from '../events/new-user.event';
 import { EventEmitter2 } from '@nestjs/event-emitter';
