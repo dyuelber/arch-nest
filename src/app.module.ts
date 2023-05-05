@@ -11,6 +11,7 @@ import { UsersModule } from './users/users.module';
 import { LoggerMiddleware } from './midllewares/logger.middleware';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
@@ -19,7 +20,9 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     TasksModule,
     AbstractModule,
     UsersModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      load: [configuration],
+    }),
     MongooseModule.forRoot(process.env.MONGO_URL),
     ScheduleModule.forRoot(),
     EventEmitterModule.forRoot({
