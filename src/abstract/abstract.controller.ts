@@ -32,6 +32,7 @@ export function abstract(options: ControllerOptions) {
     @UseGuards(AuthGuard)
     @UsePipes(new RequestsPipe(options.createValidation))
     async create(@Body() params: any): Promise<any> {
+      console.table(params);
       try {
         this.service.begin();
         const response = await this.service.create(params);
