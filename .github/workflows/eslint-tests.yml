@@ -2,7 +2,7 @@
 # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 # https://help.github.com/en/articles/workflow-syntax-for-github-actions
 
-name: Run Eslint/Tests
+name: Eslint/Tests
 
 env:
   NODE_VERSION: 18.*
