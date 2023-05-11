@@ -32,6 +32,10 @@ jobs:
             }}
           restore-keys: |
             ${{ runner.os }}-node-
+
+      - name: Run Eslint
+        run: npx eslint $(git diff --name-only HEAD | grep -E '\.(ts|jsx)$' | xargs)
+
       - name: Install Dependencies
         if: steps.cache_dependencies.outputs.cache-hit != 'true'
         run: npm ci --ignore-scripts
