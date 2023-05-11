@@ -12,7 +12,7 @@ on:
     branches: 'SP-*'
 
 jobs:
-  install:
+  run:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -35,16 +35,8 @@ jobs:
         if: steps.cache_dependencies.outputs.cache-hit != 'true'
         run: npm ci --ignore-scripts
 
-  eslint:
-    runs-on: ubuntu-latest
-    needs: install
-    steps:
       - name: Run Eslint
         run: npx eslint $(git diff --name-only HEAD | grep -E '\.(ts|jsx)$' | xargs)
 
-  tests:
-    runs-on: ubuntu-latest
-    needs: install
-    steps:
       - name: Run Test
         run: npm test
