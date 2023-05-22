@@ -9,8 +9,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, configDocs, {
     include: modules,
   });
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup(process.env.ROUTE_DOCS, app, document);
 
-  await app.listen(3000);
+  await app.listen(process.env.APP_PORT);
 }
 bootstrap();

@@ -21,6 +21,8 @@ import configuration from './config/configuration';
     AbstractModule,
     UsersModule,
     ConfigModule.forRoot({
+      cache: true,
+      isGlobal: true,
       load: [configuration],
     }),
     MongooseModule.forRoot(process.env.MONGO_URL),
