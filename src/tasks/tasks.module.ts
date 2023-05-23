@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { DisableUsersService } from './disable-users.service';
-import { ActiveUsersService } from './active-users.service';
+import { DisableUsersService } from './services/disable-users.service';
+import { ActiveUsersService } from './services/active-users.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Users, UsersSchema } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
