@@ -1,7 +1,6 @@
 import { ListenerModule } from './listeners/listener.module';
 import { EventsModule } from './events/events.module';
 import { TasksModule } from './tasks/tasks.module';
-import { AbstractModule } from './abstract/abstract.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -18,7 +17,6 @@ import configuration from './config/configuration';
     ListenerModule,
     EventsModule,
     TasksModule,
-    AbstractModule,
     UsersModule,
     ConfigModule.forRoot({
       cache: true,

@@ -1,13 +1,12 @@
 import { ClientSession, Model, ObjectId } from 'mongoose';
 import { AbstractInterface } from './abstract.interface';
-import { InjectModel } from '@nestjs/mongoose';
-import { Abstract } from './abstract.schema';
+import { NotFoundException } from '@nestjs/common';
 
-export abstract class AbstractService implements AbstractInterface {
-  protected model: Model<any>;
+export abstract class AbstractService<T> implements AbstractInterface {
+  protected model: Model<T>;
   protected session: ClientSession;
 
-  constructor(@InjectModel(Abstract.name) model: any) {
+  constructor(model: Model<T>) {
     this.model = model;
   }
 
@@ -18,58 +17,69 @@ export abstract class AbstractService implements AbstractInterface {
 
   async commit() {
     await this.session.commitTransaction();
-    this.session.endSession();
+    await this.session.endSession();
   }
 
   async rollback() {
     await this.session.abortTransaction();
-    this.session.endSession();
+    await this.session.endSession();
   }
 
-  find(filter: any): any {
-    return this.model.find({ filters: filter });
+  async find(filters: any): Promise<T[]> {
+    console.log('🚀 ~ AbstractService<T> ~ find ~ filters:', filters);
+    const response = (await this.model.find({
+      filter: filters,
+    })) as unknown as T[];
+
+    if (!response.length)
+      throw new NotFoundException('Resources not found in system');
+
+    return response;
   }
 
-  findById(id: string | ObjectId): any {
-    return this.model.findById(id);
+  async findById(id: string | ObjectId): Promise<T> {
+    const response = (await this.model.findById(id)) as T;
+    if (!response) throw new NotFoundException('Resource not found in system');
+
+    return response;
   }
 
-  beforeCreate(params: any): any {
+  async beforeCreate(params: any): Promise<T> {
     return params;
   }
 
-  create(params: any): any {
-    this.beforeCreate(params);
-    const response = this.model.create(params, { session: this.session });
-    return this.afterCreate(response);
+  async create(params: any): Promise<T> {
+    params = await this.beforeCreate(params);
+    const response = await this.model.create(params);
+    return await this.afterCreate(response);
   }
 
-  afterCreate(params: any): any {
+  async afterCreate(params: any): Promise<T> {
     return params;
   }
 
-  beforeUpdate(id: string | ObjectId, params: any): any {
+  async beforeUpdate(id: string | ObjectId, params: any): Promise<T> {
     return params;
   }
 
-  update(id: string | ObjectId, params: any): any {
-    this.beforeUpdate(id, params);
-    const response = this.model
-      .updateOne({ _id: id }, params)
-      .session(this.session);
-    return this.afterUpdate(id, response);
+  async update(id: string | ObjectId, params: any): Promise<T> {
+    params = await this.beforeUpdate(id, params);
+    const response = await this.model.findOneAndUpdate({ _id: id }, params, {
+      new: true,
+    });
+    return await this.afterUpdate(id, response);
   }
 
-  afterUpdate(id: string | ObjectId, params: any): any {
+  async afterUpdate(id: string | ObjectId, params: any): Promise<T> {
     return params;
   }
 
-  delete(id: string | ObjectId): any {
-    this.model.deleteOne({ _id: id }).session(this.session);
-    return this.afterDelete();
+  async delete(id: string | ObjectId): Promise<T> {
+    const response = await this.model.findOneAndDelete({ _id: id });
+    return this.afterDelete(id, response);
   }
 
-  afterDelete(): any {
-    return;
+  async afterDelete(id: string | ObjectId, params: any): Promise<T> {
+    return params;
   }
 }

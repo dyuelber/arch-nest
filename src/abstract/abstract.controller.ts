@@ -7,14 +7,12 @@ import {
   Put,
   Query,
   UseGuards,
-  UsePipes,
 } from '@nestjs/common';
 import { AbstractService } from './abstract.service';
 import { ObjectId } from 'mongoose';
 import { AuthGuard } from '../guards/auth.guard';
 import { RequestsPipe } from '../validations/requests.pipe';
-import { AbstractInterface, ControllerOptions } from './abstract.interface';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import Joi from 'joi';
 
 // export function abstract(options: ControllerOptions) {
 //   abstract class Abstract implements AbstractInterface {
@@ -86,71 +84,66 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 //   return Abstract;
 // }
+@UseGuards(AuthGuard)
+export abstract class AbstractController<T> {
+  protected createValidation: Joi.ObjectSchema<any>;
+  protected updateValidation: Joi.ObjectSchema<any>;
 
-// export abstract class AbstractController {
-//   protected createValidation: Joi.ObjectSchema<any>;
-//   protected updateValidation: Joi.ObjectSchema<any>;
+  constructor(protected service: AbstractService<T>) {}
 
-//   constructor(protected service: AbstractService) {}
+  @Get()
+  async find(@Query() filters: any): Promise<T[]> {
+    return await this.service.find(filters);
+  }
 
-//   @Get()
-//   @UseGuards(AuthGuard)
-//   async find(@Query('filters') filters: any): Promise<any[]> {
-//     return this.service.find(filters);
-//   }
+  @Get(':id')
+  async findById(@Param('id') id: string | ObjectId): Promise<T> {
+    return await this.service.findById(id);
+  }
 
-//   @Get(':id')
-//   @UseGuards(AuthGuard)
-//   async findById(@Param('id') id: string | ObjectId): Promise<any> {
-//     return this.service.findById(id);
-//   }
+  @Post()
+  async create(params: any): Promise<T> {
+    new RequestsPipe(this.createValidation).transform(params, null);
 
-//   @Post()
-//   @UseGuards(AuthGuard)
-//   async create(@Body() params: any): Promise<any> {
-//     new RequestsPipe(this.createValidation).transform(params, null);
+    try {
+      await this.service.begin();
+      const response = await this.service.create(params);
+      await this.service.commit();
 
-//     try {
-//       this.service.begin();
-//       const response = await this.service.create(params);
-//       await this.service.commit();
+      return response;
+    } catch (error) {
+      await this.service.rollback();
+    }
+  }
 
-//       return response;
-//     } catch (error) {
-//       await this.service.rollback();
-//     }
-//   }
+  @Put(':id')
+  async update(
+    @Param('id') id: string | ObjectId,
+    @Body() params: any,
+  ): Promise<T> {
+    new RequestsPipe(this.updateValidation).transform(params, null);
 
-//   @Put(':id')
-//   @UseGuards(AuthGuard)
-//   async update(
-//     @Param('id') id: string | ObjectId,
-//     @Body() params: any,
-//   ): Promise<any> {
-//     new RequestsPipe(this.updateValidation).transform(params, null);
+    try {
+      await this.service.begin();
+      const response = await this.service.update(id, params);
+      await this.service.commit();
 
-//     try {
-//       this.service.begin();
-//       const response = await this.service.update(id, params);
-//       await this.service.commit();
+      return response;
+    } catch (error) {
+      await this.service.rollback();
+    }
+  }
 
-//       return response;
-//     } catch (error) {
-//       await this.service.rollback();
-//     }
-//   }
+  @Delete(':id')
+  async delete(@Param('id') id: string | ObjectId): Promise<T> {
+    try {
+      await this.service.begin();
+      const response = await this.service.delete(id);
+      await this.service.commit();
 
-//   @Delete(':id')
-//   @UseGuards(AuthGuard)
-//   async delete(@Param('id') id: string | ObjectId): Promise<any> {
-//     try {
-//       this.service.begin();
-//       const response = this.service.delete(id);
-//       await this.service.commit();
-
-//       return response;
-//     } catch (error) {
-//       await this.service.rollback();
-//     }
-//   }
-// }
+      return response;
+    } catch (error) {
+      await this.service.rollback();
+    }
+  }
+}
