@@ -50,9 +50,7 @@ export abstract class AbstractService<T> implements AbstractInterface {
 
   async create(params: any, session?: ClientSession): Promise<T> {
     params = await this.beforeCreate(params);
-    const response = await this.model.create(params, { session });
-    console.log('🚀 ~ AbstractService<T> ~ create ~ response:', response);
-
+    const response = await this.model.create(params);
     return await this.afterCreate(response);
   }
 
@@ -70,7 +68,6 @@ export abstract class AbstractService<T> implements AbstractInterface {
     params = await this.beforeUpdate(id, params);
     const response = await this.model.findOneAndUpdate({ _id: id }, params, {
       new: true,
-      session,
     });
     if (!response) throw new BadRequestException('Resource not exists');
 
@@ -84,10 +81,7 @@ export abstract class AbstractService<T> implements AbstractInterface {
   async delete(id: string, session?: ClientSession): Promise<T> {
     this.validateObjectId(id);
 
-    const response = await this.model.findOneAndDelete(
-      { _id: id },
-      { session },
-    );
+    const response = await this.model.findOneAndDelete({ _id: id });
     if (!response) throw new BadRequestException('Resource not exists');
 
     return this.afterDelete(id, response);

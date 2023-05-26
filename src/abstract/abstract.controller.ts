@@ -134,7 +134,7 @@ export abstract class AbstractController<T> {
     new RequestsPipe(this.createValidation).transform(params, null);
     try {
       await this.begin();
-      const response = await this.service.create(params, this.session);
+      const response = await this.service.create(params);
       await this.commit();
 
       return response;
