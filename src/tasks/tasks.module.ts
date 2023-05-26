@@ -5,7 +5,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Users, UsersSchema } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { EventsModule } from '../events/events.module';
-import { NewUser } from '../events/new-user.event';
 
 @Module({
   imports: [
@@ -13,6 +12,6 @@ import { NewUser } from '../events/new-user.event';
     EventsModule,
   ],
   controllers: [],
-  providers: [UsersService, DisableUsersService, ActiveUsersService, NewUser],
+  providers: [UsersService], //DisableUsersService, ActiveUsersService],
 })
 export class TasksModule {}

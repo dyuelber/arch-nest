@@ -8,7 +8,6 @@ import {
 } from './validations/create';
 import { UsersDocument } from './entities/user.entity';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { ObjectId } from 'mongoose';
 
 @Controller('users')
 export class UsersController extends AbstractController<UsersDocument> {
@@ -19,24 +18,24 @@ export class UsersController extends AbstractController<UsersDocument> {
   }
 
   @Get(':id')
-  async findById(id: string | ObjectId): Promise<UsersDocument> {
+  async findById(id: string): Promise<UsersDocument> {
     return super.findById(id);
   }
 
   @Post()
   @ApiOperation(apiOperationCreate)
   @ApiResponse(apiOperationCreateResponse)
-  async create(@Body() params: any): Promise<UsersDocument> {
+  async create(@Body() params: object): Promise<UsersDocument> {
     return await super.create(params);
   }
 
   @Put(':id')
-  async update(id: string | ObjectId, params: any): Promise<UsersDocument> {
+  async update(id: string, @Body() params: object): Promise<UsersDocument> {
     return await super.update(id, params);
   }
 
   @Delete(':id')
-  async delete(id: string | ObjectId): Promise<UsersDocument> {
+  async delete(id: string): Promise<UsersDocument> {
     return await super.delete(id);
   }
 }

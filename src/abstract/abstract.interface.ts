@@ -1,13 +1,17 @@
 import { ApiOperationOptions, ApiResponseOptions } from '@nestjs/swagger';
 import * as Joi from 'joi';
-import { ObjectId } from 'mongoose';
+import { ClientSession } from 'mongoose';
 
 export interface AbstractInterface {
   find(filter: any): any;
-  findById(id: string | ObjectId): any;
-  create(params: any): any;
-  update(id: string | ObjectId, params: any): any;
-  delete(id: string | ObjectId): any;
+  findById(id: string): any;
+  create(params: any, session?: ClientSession): any;
+  update(id: string, params: any, session?: ClientSession): any;
+  delete(id: string, session?: ClientSession): any;
+}
+
+export interface IAbstractFilters {
+  search: string;
 }
 
 export interface ControllerOptions {

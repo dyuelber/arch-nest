@@ -14,9 +14,8 @@ export class RequestsPipe implements PipeTransform {
     const { error } = this.schema.validate(value);
 
     if (error) {
-      // fix message error
       throw new UnprocessableEntityException({
-        message: 'Validation failed',
+        message: error.message,
         error,
         metadata,
       });
