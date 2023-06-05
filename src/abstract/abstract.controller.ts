@@ -3,6 +3,7 @@ import {
   Delete,
   Get,
   HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -22,8 +23,6 @@ export abstract class AbstractController<T> {
   protected updateValidation: Joi.ObjectSchema<any>;
   protected session: ClientSession;
 
-  UNPROCESSABLE_ENTITY = 422;
-
   constructor(protected service: AbstractService<T>) {}
 
   async begin() {
@@ -33,12 +32,12 @@ export abstract class AbstractController<T> {
 
   async commit() {
     await this.session.commitTransaction();
-    await this.session.endSession();
+    this.session.endSession();
   }
 
   async rollback() {
     await this.session.abortTransaction();
-    await this.session.endSession();
+    this.session.endSession();
   }
 
   @Get()
@@ -72,7 +71,7 @@ export abstract class AbstractController<T> {
       await this.rollback();
       throw new HttpException(
         error?.response ?? error?.message,
-        error?.status ?? this.UNPROCESSABLE_ENTITY,
+        error?.status ?? HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
   }
@@ -91,7 +90,7 @@ export abstract class AbstractController<T> {
       await this.rollback();
       throw new HttpException(
         error?.response ?? error?.message,
-        error?.status ?? this.UNPROCESSABLE_ENTITY,
+        error?.status ?? HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
   }
@@ -108,7 +107,7 @@ export abstract class AbstractController<T> {
       await this.rollback();
       throw new HttpException(
         error?.response ?? error?.message,
-        error?.status ?? this.UNPROCESSABLE_ENTITY,
+        error?.status ?? HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
   }

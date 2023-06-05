@@ -1,9 +1,16 @@
 import { OnEvent } from '@nestjs/event-emitter';
+import { Events } from '../events/event-name.enums';
 
-export class Notifyuser {
-  @OnEvent('new.user')
-  notify(payload: any) {
-    console.log('New User');
-    console.log(payload.name);
+export class NotifyUser {
+  @OnEvent(Events.userCreate)
+  create(payload: any) {
+    console.log('event', Events.userCreate);
+    console.log('payload', payload);
+  }
+
+  @OnEvent(Events.userUpdate)
+  update(payload: any) {
+    console.log('event', Events.userUpdate);
+    console.log('payload', payload);
   }
 }

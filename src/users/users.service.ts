@@ -3,20 +3,25 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AbstractService } from '../abstract/abstract.service';
 import { Users, UsersDocument } from './entities/user.entity';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Event } from '../events/events.service';
+import { Events } from '../events/event-name.enums';
 
 @Injectable()
 export class UsersService extends AbstractService<UsersDocument> {
   constructor(
     @InjectModel(Users.name)
     protected model: Model<UsersDocument>,
-    private eventEmitter: EventEmitter2,
   ) {
     super(model);
   }
 
+  afterCreate(params: any): Promise<UsersDocument> {
+    Event.dispatch(Events.userCreate, params);
+    return params;
+  }
+
   afterUpdate(id: string, params: any): Promise<UsersDocument> {
-    this.eventEmitter.emitAsync('new.user', params);
+    Event.dispatch(Events.userUpdate, params);
     return params;
   }
 }
