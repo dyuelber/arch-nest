@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ClientSession, Model, Types } from 'mongoose';
 import { AbstractInterface, IAbstractFilters } from './abstract.interface';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
