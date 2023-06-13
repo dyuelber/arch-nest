@@ -16,6 +16,7 @@ import { AuthGuard } from '../guards/auth.guard';
 import { RequestsPipe } from '../validations/requests.pipe';
 import Joi from 'joi';
 import { IAbstractFilters } from './abstract.interface';
+import { IPaginateResult } from '../utils/interfaces.util';
 
 @UseGuards(AuthGuard)
 export abstract class AbstractController<T> {
@@ -41,7 +42,7 @@ export abstract class AbstractController<T> {
   }
 
   @Get()
-  async find(@Query() filters: IAbstractFilters): Promise<T[]> {
+  async find(@Query() filters: IAbstractFilters): Promise<IPaginateResult> {
     try {
       return await this.service.find(filters);
     } catch (error) {

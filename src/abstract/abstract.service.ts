@@ -2,6 +2,8 @@
 import { ClientSession, Model, Types } from 'mongoose';
 import { AbstractInterface, IAbstractFilters } from './abstract.interface';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { Paginate } from '../utils/paginate.util';
+import { IPaginateResult, SortOrder } from '../utils/interfaces.util';
 
 export abstract class AbstractService<T> implements AbstractInterface {
   protected model: Model<T>;
@@ -14,24 +16,37 @@ export abstract class AbstractService<T> implements AbstractInterface {
     return this.model;
   }
 
-  handleFilters(filters: IAbstractFilters): IAbstractFilters {
-    if (!filters.search) return;
-    delete filters.search;
-    return filters;
-  }
-
   validateObjectId(id: string): void {
     if (!Types.ObjectId.isValid(id as string)) throw new BadRequestException();
   }
 
-  async find(filters: IAbstractFilters): Promise<T[]> {
-    const filter = this.handleFilters(filters);
-    const response = (await this.model
-      .find(filter)
-      .sort({ _id: 1 })) as unknown as T[];
+  handleDefaultPaginate(filters: IAbstractFilters): IAbstractFilters {
+    return {
+      paginate: {
+        perPage: filters.perPage ? parseInt(filters.perPage) : 10,
+        page: filters.page ? parseInt(filters.page) : 1,
+      },
+      sort: {
+        field: '_id',
+        order: SortOrder.DESC,
+      },
+    } as IAbstractFilters;
+  }
 
-    if (!response.length)
-      throw new NotFoundException('Resources not found in system');
+  handleAgregate(filters: IAbstractFilters) {
+    return [];
+  }
+
+  async find(filters: IAbstractFilters): Promise<IPaginateResult> {
+    const options = this.handleDefaultPaginate(filters);
+    const aggregate = this.handleAgregate(filters);
+
+    const response = await Paginate(
+      this.model,
+      aggregate,
+      options.paginate,
+      options.sort,
+    );
 
     return response;
   }

@@ -8,6 +8,8 @@ import {
 } from './validations/create';
 import { UsersDocument } from './entities/user.entity';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { IAbstractFilters } from 'src/abstract/abstract.interface';
+import { IPaginateResult } from 'src/utils/interfaces.util';
 
 @Controller('users')
 export class UsersController extends AbstractController<UsersDocument> {
@@ -17,9 +19,14 @@ export class UsersController extends AbstractController<UsersDocument> {
     this.updateValidation = createUser;
   }
 
+  @Get()
+  async find(filters: IAbstractFilters): Promise<IPaginateResult> {
+    return await super.find(filters);
+  }
+
   @Get(':id')
   async findById(id: string): Promise<UsersDocument> {
-    return super.findById(id);
+    return await super.findById(id);
   }
 
   @Post()

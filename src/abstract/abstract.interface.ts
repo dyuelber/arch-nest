@@ -1,6 +1,5 @@
-import { ApiOperationOptions, ApiResponseOptions } from '@nestjs/swagger';
-import * as Joi from 'joi';
 import { ClientSession } from 'mongoose';
+import { IPaginateData, ISortData } from '../utils/interfaces.util';
 
 export interface AbstractInterface {
   find(filter: any): any;
@@ -12,13 +11,8 @@ export interface AbstractInterface {
 
 export interface IAbstractFilters {
   search: string;
-}
-
-export interface ControllerOptions {
-  createValidation?: Joi.ObjectSchema<any>;
-  apiCreateSchema?: ApiOperationOptions;
-  apiCreateResponseSchema?: ApiResponseOptions;
-  updateValidation?: Joi.ObjectSchema<any>;
-  apiUpdateSchema?: ApiOperationOptions;
-  apiUpdateResponseSchema?: ApiResponseOptions;
+  page?: string;
+  perPage?: string;
+  paginate?: IPaginateData;
+  sort?: ISortData;
 }
