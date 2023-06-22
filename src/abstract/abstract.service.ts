@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ClientSession, Model, Types } from 'mongoose';
 import { AbstractInterface, IAbstractFilters } from './abstract.interface';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
@@ -66,7 +65,8 @@ export abstract class AbstractService<T> implements AbstractInterface {
 
   async create(params: any, session?: ClientSession): Promise<T> {
     params = await this.beforeCreate(params);
-    const response = await this.model.create(params);
+    const model = new this.model(params);
+    const response = await model.save({ session });
     return await this.afterCreate(response);
   }
 

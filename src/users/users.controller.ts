@@ -8,8 +8,8 @@ import {
 } from './validations/create';
 import { UsersDocument } from './entities/user.entity';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { IAbstractFilters } from 'src/abstract/abstract.interface';
-import { IPaginateResult } from 'src/utils/interfaces.util';
+import { IAbstractFilters } from '../abstract/abstract.interface';
+import { IPaginateResult } from '../utils/interfaces.util';
 
 @Controller('users')
 export class UsersController extends AbstractController<UsersDocument> {

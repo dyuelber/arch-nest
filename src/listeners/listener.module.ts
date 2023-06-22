@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { NotifyUser } from './notify-user';
+import { UserListener } from './user.listener';
 
 @Module({
   imports: [],
   controllers: [],
-  providers: [NotifyUser],
+  providers: [UserListener],
 })
 export class ListenerModule {}

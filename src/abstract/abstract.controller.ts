@@ -26,19 +26,24 @@ export abstract class AbstractController<T> {
 
   constructor(protected service: AbstractService<T>) {}
 
+  async createSession() {
+    //this.session = await this.service.getModel().db.startSession();
+  }
+
   async begin() {
-    this.session = await this.service.getModel().db.startSession();
-    this.session.startTransaction();
+    //this.session.startTransaction();
   }
 
   async commit() {
-    await this.session.commitTransaction();
-    this.session.endSession();
+    //await this.session.commitTransaction();
   }
 
   async rollback() {
-    await this.session.abortTransaction();
-    this.session.endSession();
+    //await this.session.abortTransaction();
+  }
+
+  async closeSession() {
+    //await this.session.endSession();
   }
 
   @Get()
@@ -62,6 +67,7 @@ export abstract class AbstractController<T> {
   @Post()
   async create(params: object): Promise<T> {
     new RequestsPipe(this.createValidation).transform(params, null);
+    await this.createSession();
     try {
       await this.begin();
       const response = await this.service.create(params);
@@ -74,13 +80,15 @@ export abstract class AbstractController<T> {
         error?.response ?? error?.message,
         error?.status ?? HttpStatus.UNPROCESSABLE_ENTITY,
       );
+    } finally {
+      await this.closeSession();
     }
   }
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() params: object): Promise<T> {
     new RequestsPipe(this.updateValidation).transform(params, null);
-
+    await this.createSession();
     try {
       await this.begin();
       const response = await this.service.update(id, params);
@@ -93,11 +101,14 @@ export abstract class AbstractController<T> {
         error?.response ?? error?.message,
         error?.status ?? HttpStatus.UNPROCESSABLE_ENTITY,
       );
+    } finally {
+      await this.closeSession();
     }
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<T> {
+    await this.createSession();
     try {
       await this.begin();
       const response = await this.service.delete(id);
@@ -110,6 +121,8 @@ export abstract class AbstractController<T> {
         error?.response ?? error?.message,
         error?.status ?? HttpStatus.UNPROCESSABLE_ENTITY,
       );
+    } finally {
+      await this.closeSession();
     }
   }
 }
