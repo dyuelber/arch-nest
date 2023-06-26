@@ -5,6 +5,9 @@ import { Paginate } from '../utils/paginate.util';
 import { IPaginateResult, SortOrder } from '../utils/interfaces.util';
 
 export abstract class AbstractService<T> implements AbstractInterface {
+  private perPage = 10;
+  private page = 1;
+
   protected model: Model<T>;
 
   constructor(model: Model<T>) {
@@ -22,8 +25,8 @@ export abstract class AbstractService<T> implements AbstractInterface {
   handleDefaultPaginate(filters: IAbstractFilters): IAbstractFilters {
     return {
       paginate: {
-        perPage: filters.perPage ? parseInt(filters.perPage) : 10,
-        page: filters.page ? parseInt(filters.page) : 1,
+        perPage: filters.perPage ? parseInt(filters.perPage) : this.perPage,
+        page: filters.page ? parseInt(filters.page) : this.page,
       },
       sort: {
         field: '_id',
@@ -59,7 +62,7 @@ export abstract class AbstractService<T> implements AbstractInterface {
     return response;
   }
 
-  async beforeCreate(params: any): Promise<T> {
+  async beforeCreate(params: any): Promise<any> {
     return params;
   }
 
@@ -74,7 +77,7 @@ export abstract class AbstractService<T> implements AbstractInterface {
     return params;
   }
 
-  async beforeUpdate(id: string, params: any): Promise<T> {
+  async beforeUpdate(id: string, params: any): Promise<any> {
     return params;
   }
 

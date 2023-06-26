@@ -1,3 +1,4 @@
+import { ProductsModule } from './products/products.module';
 import { ListenerModule } from './listeners/listener.module';
 import { EventsModule } from './events/events.module';
 import { TasksModule } from './tasks/tasks.module';
@@ -15,6 +16,7 @@ import configuration from './config/configuration';
 
 @Module({
   imports: [
+    ProductsModule,
     ListenerModule,
     EventsModule,
     TasksModule,

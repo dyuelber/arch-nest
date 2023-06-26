@@ -8,10 +8,7 @@ import { Events } from '../events/event-name.enums';
 
 @Injectable()
 export class UsersService extends AbstractService<UsersDocument> {
-  constructor(
-    @InjectModel(Users.name)
-    protected model: Model<UsersDocument>,
-  ) {
+  constructor(@InjectModel(Users.name) protected model: Model<UsersDocument>) {
     super(model);
   }
 
