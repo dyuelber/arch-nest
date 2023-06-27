@@ -1,5 +1,6 @@
 import { DocumentBuilder } from '@nestjs/swagger';
-import { UsersModule } from 'src/users/users.module';
+import { ProductsModule } from '../products/products.module';
+import { UsersModule } from '../users/users.module';
 
 const configDocs = new DocumentBuilder()
   .setTitle('Docs example')
@@ -12,6 +13,6 @@ const configDocs = new DocumentBuilder()
   .setVersion('1.0')
   .build();
 
-const modules = [UsersModule];
+const modules = [UsersModule, ProductsModule];
 
 export { configDocs, modules };

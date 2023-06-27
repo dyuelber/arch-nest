@@ -5,13 +5,14 @@ import {
   apiOperationCreate,
   apiOperationCreateResponse,
   createUser,
-} from './validations/create';
+} from './validations/create-update';
 import { UsersDocument } from './entities/user.entity';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IAbstractFilters } from '../abstract/abstract.interface';
 import { IPaginateResult } from '../utils/interfaces.util';
 
 @Controller('users')
+@ApiTags('users')
 export class UsersController extends AbstractController<UsersDocument> {
   constructor(protected usersService: UsersService) {
     super(usersService);
