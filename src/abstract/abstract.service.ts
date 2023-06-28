@@ -88,6 +88,7 @@ export abstract class AbstractService<T> implements AbstractInterface {
     params = await this.beforeUpdate(id, params);
     const response = await this.model.findOneAndUpdate({ _id: id }, params, {
       new: true,
+      session: session,
     });
     if (!response) throw new BadRequestException('Resource not exists');
 

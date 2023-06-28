@@ -70,7 +70,7 @@ export abstract class AbstractController<T> {
     await this.createSession();
     try {
       await this.begin();
-      const response = await this.service.create(params);
+      const response = await this.service.create(params, this.session);
       await this.commit();
 
       return response;
@@ -91,7 +91,7 @@ export abstract class AbstractController<T> {
     await this.createSession();
     try {
       await this.begin();
-      const response = await this.service.update(id, params);
+      const response = await this.service.update(id, params, this.session);
       await this.commit();
 
       return response;
