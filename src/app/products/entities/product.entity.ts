@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, SchemaTypes } from 'mongoose';
 import { IProductStatus } from '../interfaces/products.interface';
-import { Users } from 'src/users/entities/user.entity';
+import { Users } from '../../users/entities/user.entity';
 
 export type ProductDocument = Product & Document;
 

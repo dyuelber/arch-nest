@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { AbstractController } from '../abstract/abstract.controller';
+import { AbstractController } from '../../abstract/abstract.controller';
 import {
   apiOperationCreate,
   apiOperationCreateResponse,
@@ -8,8 +8,8 @@ import {
 } from './validations/create-update';
 import { UsersDocument } from './entities/user.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { IAbstractFilters } from '../abstract/abstract.interface';
-import { IPaginateResult } from '../utils/interfaces.util';
+import { IAbstractFilters } from '../../abstract/abstract.interface';
+import { IPaginateResult } from '../../utils/interfaces.util';
 
 @Controller('users')
 @ApiTags('users')

@@ -1,4 +1,3 @@
-import { ProductsModule } from './products/products.module';
 import { ListenerModule } from './listeners/listener.module';
 import { EventsModule } from './events/events.module';
 import { TasksModule } from './tasks/tasks.module';
@@ -7,12 +6,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UsersModule } from './users/users.module';
 import { LoggerMiddleware } from './midllewares/logger.middleware';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { LogActionsMiddleware } from './midllewares/log-actions.middleware';
 import configuration from './config/configuration';
+import { ProductsModule } from './app/products/products.module';
+import { UsersModule } from './app/users/users.module';
 
 @Module({
   imports: [
