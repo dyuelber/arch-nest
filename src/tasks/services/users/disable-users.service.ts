@@ -6,6 +6,6 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 export class DisableUsersService implements ScheduleInterface {
   @Cron(CronExpression.EVERY_10_SECONDS)
   async run(): Promise<void> {
-    console.log('deleted users');
+    // console.log('deleted users');
   }
 }

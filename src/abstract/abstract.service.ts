@@ -44,14 +44,12 @@ export abstract class AbstractService<T> implements AbstractInterface {
     const options = this.handleDefaultPaginate(filters);
     const aggregate = this.handleAgregate(filters);
 
-    const response = await Paginate(
+    return await Paginate(
       this.model,
       aggregate,
       options.paginate,
       options.sort,
     );
-
-    return response;
   }
 
   async findById(id: string): Promise<T> {

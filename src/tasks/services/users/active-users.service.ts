@@ -9,8 +9,8 @@ export class ActiveUsersService implements ScheduleInterface {
 
   @Cron(CronExpression.EVERY_10_SECONDS)
   async run(): Promise<void> {
-    const user = await this.service.findById('647df7d4c98283467c43e8a1');
-    console.log('🚀 ~ ActiveUsersService ~ run ~ user:', user);
-    console.log('users');
+    //const user = await this.service.findById('647df7d4c98283467c43e8a1');
+    //console.log('🚀 ~ ActiveUsersService ~ run ~ user:', user);
+    //console.log('users');
   }
 }

@@ -16,9 +16,4 @@ export class UserListener {
   update(payload: any) {
     console.log('event:', Events.userUpdate, 'payload:', payload);
   }
-
-  @OnEvent(Events.userDelete)
-  delete(payload: any) {
-    console.log('event:', Events.userUpdate, 'payload:', payload);
-  }
 }
