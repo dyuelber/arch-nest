@@ -10,7 +10,7 @@ export interface AbstractInterface {
 }
 
 export interface IAbstractFilters {
-  search: string;
+  search?: string;
   page?: string;
   perPage?: string;
   paginate?: IPaginateData;

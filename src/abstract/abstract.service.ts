@@ -67,8 +67,7 @@ export abstract class AbstractService<T> implements AbstractInterface {
 
   async create(params: any, session?: ClientSession): Promise<T> {
     params = await this.beforeCreate(params);
-    const model = new this.model(params);
-    const response = await model.save({ session });
+    const [response] = await this.model.create([params], { session });
     return await this.afterCreate(response);
   }
 
