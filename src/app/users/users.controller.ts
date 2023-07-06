@@ -21,7 +21,7 @@ export class UsersController extends AbstractController<Users> {
   }
 
   @Get()
-  async find(filters: IAbstractFilters): Promise<IPaginateResult> {
+  async find(filters: IAbstractFilters): Promise<IPaginateResult<Users>> {
     return await super.find(filters);
   }
 

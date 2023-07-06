@@ -47,7 +47,7 @@ export abstract class AbstractController<T> {
   }
 
   @Get()
-  async find(@Query() filters: IAbstractFilters): Promise<IPaginateResult> {
+  async find(@Query() filters: IAbstractFilters): Promise<IPaginateResult<T>> {
     try {
       return await this.service.find(filters);
     } catch (error) {

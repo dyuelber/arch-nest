@@ -10,8 +10,8 @@ export interface ISortData {
   order?: SortOrder;
 }
 
-export interface IPaginateResult {
-  results: any[];
+export interface IPaginateResult<T> {
+  results: T[];
   paginate: IPaginateData;
   sort: ISortData;
 }

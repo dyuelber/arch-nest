@@ -11,7 +11,7 @@ const Paginate = async (
   aggregate: any[],
   paginate: IPaginateData,
   sort: ISortData,
-): Promise<IPaginateResult> => {
+): Promise<IPaginateResult<any>> => {
   const results = await model
     .aggregate(
       aggregate

@@ -40,7 +40,7 @@ export abstract class AbstractService<T> implements AbstractInterface {
     return [];
   }
 
-  async find(filters: IAbstractFilters): Promise<IPaginateResult> {
+  async find(filters: IAbstractFilters): Promise<IPaginateResult<T>> {
     const options = this.handleDefaultPaginate(filters);
     const aggregate = this.handleAgregate(filters);
 
