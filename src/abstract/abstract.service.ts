@@ -24,7 +24,7 @@ export abstract class AbstractService<T> implements AbstractInterface {
   }
 
   validateObjectId(id: string): void {
-    if (!Types.ObjectId.isValid(id as string)) throw new BadRequestException();
+    if (!Types.ObjectId.isValid(id)) throw new BadRequestException();
   }
 
   defaultPaginate(filters: IAbstractFilters): IAbstractFilters {
@@ -64,7 +64,7 @@ export abstract class AbstractService<T> implements AbstractInterface {
               ? [
                   {
                     $sort: {
-                      [sort.field]: sort.order === SortOrder.ASC ? 1 : -1,
+                      [sort.field]: sort.order === SortOrder.DESC ? -1 : 1,
                     },
                   },
                 ]
@@ -80,9 +80,7 @@ export abstract class AbstractService<T> implements AbstractInterface {
     const [countQuery] = await this.model.aggregate(
       pipeline.concat([{ $count: 'total' }]),
     );
-
     const total = countQuery ? countQuery.total : 0;
-
     paginate.pages = Math.max(Math.ceil(total / paginate.perPage), 1);
     paginate.total = total;
 
