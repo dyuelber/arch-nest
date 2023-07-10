@@ -5,7 +5,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { MockUsers } from './mock.users';
 import { Event } from '../../../events/events.service';
 import { Model } from 'mongoose';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -32,30 +32,38 @@ describe('UsersService', () => {
   describe('create', () => {
     it('success', async () => {
       const mockedResponse = MockUsers.respSuccess();
-
-      MockUsers.set(Model<Users>).create(mockedResponse);
+      const spy = MockUsers.set(Model<Users>).create(mockedResponse);
 
       const response = await service.create(MockUsers.createData());
 
+      expect(spy).toHaveBeenCalled();
       expect(response).toEqual(mockedResponse);
+    });
+
+    it.skip('error', async () => {
+      try {
+        await service.create(MockUsers.createData());
+      } catch (error) {
+        expect(error.message).toEqual('Bad Request');
+        expect(error instanceof BadRequestException);
+      }
     });
   });
 
   describe('update', () => {
     it('success', async () => {
       const mockedResponse = MockUsers.respSuccess();
-
-      MockUsers.set(Model<Users>).findOneAndUpdate(mockedResponse);
+      const spy = MockUsers.set(Model<Users>).findOneAndUpdate(mockedResponse);
 
       const id = '64a5ab356b51623dd698d98d';
       const response = await service.update(id, MockUsers.createData());
 
+      expect(spy).toHaveBeenCalled();
       expect(response).toEqual(mockedResponse);
     });
 
     it('error', async () => {
       const mockedResponse = MockUsers.respSuccess();
-
       MockUsers.set(Model<Users>).findOneAndUpdate(mockedResponse);
 
       try {
@@ -69,40 +77,65 @@ describe('UsersService', () => {
   });
 
   describe('find', () => {
-    it.skip('success', async () => {
+    it('success', async () => {
       const mockedResponse = MockUsers.respFind();
-
-      MockUsers.set(Model<Users>).find(mockedResponse);
+      MockUsers.set(service).paginate(mockedResponse);
 
       const response = await service.find({ page: '1', perPage: '2' });
 
       expect(response).toEqual(mockedResponse);
+    });
+
+    it('error', async () => {
+      MockUsers.set(service).paginate(null);
+      try {
+        await service.find({ page: '1', perPage: '2' });
+      } catch (error) {
+        expect(error.message).toEqual('Resource not found in system');
+        expect(error instanceof NotFoundException);
+      }
     });
   });
 
   describe('findById', () => {
     it('success', async () => {
       const mockedResponse = MockUsers.respSuccess();
-
       MockUsers.set(Model<Users>).findById(mockedResponse);
 
-      const id = '64a5ab356b51623dd698d98d';
-      const response = await service.findById(id);
+      const response = await service.findById('64a5ab356b51623dd698d98d');
 
       expect(response).toEqual(mockedResponse);
+    });
+
+    it('error', async () => {
+      MockUsers.set(service).paginate(null);
+      try {
+        await service.findById('64a5ab356b51623dd698d98d');
+      } catch (error) {
+        expect(error.message).toEqual('Resource not found in system');
+        expect(error instanceof NotFoundException);
+      }
     });
   });
 
   describe('delete', () => {
     it('success', async () => {
       const mockedResponse = MockUsers.respSuccess();
-
       MockUsers.set(Model<Users>).findOneAndDelete(mockedResponse);
 
-      const id = '64a5ab356b51623dd698d98d';
-      const response = await service.delete(id);
+      const response = await service.delete('64a5ab356b51623dd698d98d');
 
       expect(response).toEqual(mockedResponse);
+    });
+
+    it('error', async () => {
+      MockUsers.set(Model<Users>).findOneAndDelete(null);
+      try {
+        await service.findById('64a5ab356b51623dd698d98d');
+      } catch (error) {
+        expect(error.message).toEqual('Resource not found in system');
+        expect(error instanceof NotFoundException);
+      }
     });
   });
 });
