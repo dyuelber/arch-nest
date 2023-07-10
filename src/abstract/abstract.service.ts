@@ -2,8 +2,12 @@
 import { ClientSession, Model, Types } from 'mongoose';
 import { AbstractInterface, IAbstractFilters } from './abstract.interface';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { Paginate } from '../utils/paginate.util';
-import { IPaginateResult, SortOrder } from '../utils/interfaces.util';
+import {
+  IPaginateData,
+  IPaginateResult,
+  ISortData,
+  SortOrder,
+} from '../utils/interfaces.util';
 
 export abstract class AbstractService<T> implements AbstractInterface {
   private perPage = 10;
@@ -23,7 +27,7 @@ export abstract class AbstractService<T> implements AbstractInterface {
     if (!Types.ObjectId.isValid(id as string)) throw new BadRequestException();
   }
 
-  handleDefaultPaginate(filters: IAbstractFilters): IAbstractFilters {
+  defaultPaginate(filters: IAbstractFilters): IAbstractFilters {
     return {
       paginate: {
         perPage: filters.perPage ? parseInt(filters.perPage) : this.perPage,
@@ -36,20 +40,61 @@ export abstract class AbstractService<T> implements AbstractInterface {
     } as IAbstractFilters;
   }
 
-  handleAgregate(filters: IAbstractFilters) {
+  createPipeline(filters: IAbstractFilters) {
     return [];
   }
 
   async find(filters: IAbstractFilters): Promise<IPaginateResult<T>> {
-    const options = this.handleDefaultPaginate(filters);
-    const aggregate = this.handleAgregate(filters);
+    const options = this.defaultPaginate(filters);
+    const pipeline = this.createPipeline(filters);
 
-    return await Paginate(
-      this.model,
-      aggregate,
-      options.paginate,
-      options.sort,
+    return await this.paginate(pipeline, options.paginate, options.sort);
+  }
+
+  async paginate(
+    pipeline: any[],
+    paginate: IPaginateData,
+    sort: ISortData,
+  ): Promise<IPaginateResult<T>> {
+    const results = await this.model
+      .aggregate(
+        pipeline
+          .concat(
+            sort.field
+              ? [
+                  {
+                    $sort: {
+                      [sort.field]: sort.order === SortOrder.ASC ? 1 : -1,
+                    },
+                  },
+                ]
+              : [],
+          )
+          .concat([
+            { $skip: (paginate.page - 1) * paginate.perPage },
+            { $limit: paginate.perPage },
+          ]),
+      )
+      .collation({ locale: 'pt' });
+
+    const [countQuery] = await this.model.aggregate(
+      pipeline.concat([{ $count: 'total' }]),
     );
+
+    const total = countQuery ? countQuery.total : 0;
+
+    paginate.pages = Math.max(Math.ceil(total / paginate.perPage), 1);
+    paginate.total = total;
+
+    return {
+      results,
+      paginate,
+      sort,
+    };
+  }
+
+  async aggregate(aggregate: []) {
+    return await this.model.aggregate(aggregate);
   }
 
   async findById(id: string): Promise<T> {
