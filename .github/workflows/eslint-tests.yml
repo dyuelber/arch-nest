@@ -22,23 +22,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-
-      - name: Cache Dependencies
-        id: cache_dependencies
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: >-
-            ${{ runner.os }}-dependencies-${{ hashFiles('./package-lock.json')
-            }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: 'npm'
       - name: Install Dependencies
-        if: steps.cache_dependencies.outputs.cache-hit != 'true'
-        run: npm ci --ignore-scripts
-
+        run: npm ci
       - name: Run Eslint
         run: npx eslint $(git diff --name-only HEAD | grep -E '\.(ts|jsx)$' | xargs)
-
       - name: Run Test
         run: npm test
