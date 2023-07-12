@@ -40,13 +40,15 @@ describe('UsersService', () => {
       expect(response).toEqual(mockedResponse);
     });
 
-    it.skip('error', async () => {
+    it('error', async () => {
+      let result: Users;
+      MockUsers.unset();
       try {
-        await service.create(MockUsers.createData());
+        result = await service.create(MockUsers.createData());
       } catch (error) {
-        expect(error.message).toEqual('Bad Request');
         expect(error instanceof BadRequestException);
       }
+      expect(result).toBeUndefined();
     });
   });
 
