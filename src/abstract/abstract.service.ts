@@ -139,13 +139,21 @@ export abstract class AbstractService<T> implements AbstractInterface {
     return params;
   }
 
+  async beforeDelete(id: string): Promise<void> {
+    //
+  }
+
   async delete(id: string, session?: ClientSession): Promise<T> {
     this.validateObjectId(id);
 
-    const response = await this.model.findOneAndDelete({ _id: id });
+    await this.beforeDelete(id);
+    const response = await this.model.findOneAndDelete(
+      { _id: id },
+      { session },
+    );
     if (!response) throw new BadRequestException('Resource not exists');
 
-    return this.afterDelete(id, response);
+    return await this.afterDelete(id, response);
   }
 
   async afterDelete(id: string, params: T): Promise<T> {
