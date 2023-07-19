@@ -65,7 +65,7 @@ export abstract class AbstractController<T> {
   }
 
   @Post()
-  async create(@Body() params: object): Promise<T> {
+  async create(@Body() params: T): Promise<T> {
     new RequestsPipe(this.createValidation).transform(params, null);
     await this.createSession();
     try {
@@ -86,7 +86,7 @@ export abstract class AbstractController<T> {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() params: object): Promise<T> {
+  async update(@Param('id') id: string, @Body() params: T): Promise<T> {
     new RequestsPipe(this.updateValidation).transform(params, null);
     await this.createSession();
     try {

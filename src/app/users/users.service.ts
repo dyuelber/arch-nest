@@ -25,12 +25,12 @@ export class UsersService extends AbstractService<Users> {
     ];
   }
 
-  afterCreate(params: any): Promise<Users> {
+  async afterCreate(params: Users): Promise<Users> {
     Event.dispatch(Events.userCreate, params);
     return params;
   }
 
-  afterUpdate(id: string, params: any): Promise<Users> {
+  async afterUpdate(id: string, params: Users): Promise<Users> {
     Event.dispatch(Events.userUpdate, params);
     return params;
   }

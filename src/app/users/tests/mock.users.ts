@@ -1,10 +1,11 @@
 import { Mock } from '../../../mocks/mock.model';
+import { Users } from '../entities/user.entity';
 
 export class MockUsers extends Mock {
-  static createData() {
+  static createData(): Users {
     return {
       name: 'My User',
-      age: '34',
+      age: 34,
     };
   }
 

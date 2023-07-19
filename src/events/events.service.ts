@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Events } from './event-name.enums';
 
 @Injectable()
 export class Event {
@@ -9,7 +10,7 @@ export class Event {
     Event.emitter = eventEmitter;
   }
 
-  static async dispatch(event: string, payload: any) {
+  static async dispatch(event: Events, payload: unknown) {
     Event.emitter.emitAsync(event, payload);
   }
 }

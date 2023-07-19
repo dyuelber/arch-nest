@@ -104,25 +104,25 @@ export abstract class AbstractService<T> implements AbstractInterface {
     return response;
   }
 
-  async beforeCreate(params: any): Promise<any> {
+  async beforeCreate(params: T): Promise<any> {
     return params;
   }
 
-  async create(params: any, session?: ClientSession): Promise<T> {
+  async create(params: T, session?: ClientSession): Promise<T> {
     params = await this.beforeCreate(params);
     const [response] = await this.model.create([params], { session });
     return await this.afterCreate(response);
   }
 
-  async afterCreate(params: any): Promise<T> {
+  async afterCreate(params: T): Promise<T> {
     return params;
   }
 
-  async beforeUpdate(id: string, params: any): Promise<any> {
+  async beforeUpdate(id: string, params: T): Promise<any> {
     return params;
   }
 
-  async update(id: string, params: any, session?: ClientSession): Promise<T> {
+  async update(id: string, params: T, session?: ClientSession): Promise<T> {
     this.validateObjectId(id);
 
     params = await this.beforeUpdate(id, params);
@@ -135,7 +135,7 @@ export abstract class AbstractService<T> implements AbstractInterface {
     return await this.afterUpdate(id, response);
   }
 
-  async afterUpdate(id: string, params: any): Promise<T> {
+  async afterUpdate(id: string, params: T): Promise<T> {
     return params;
   }
 
@@ -148,7 +148,7 @@ export abstract class AbstractService<T> implements AbstractInterface {
     return this.afterDelete(id, response);
   }
 
-  async afterDelete(id: string, params: any): Promise<T> {
+  async afterDelete(id: string, params: T): Promise<T> {
     return params;
   }
 }

@@ -8,7 +8,7 @@ export type ProductDocument = Product & Document;
 @Schema({ timestamps: true, versionKey: false, collection: 'products' })
 export class Product {
   @Prop({ type: SchemaTypes.ObjectId, ref: () => Users })
-  _userId: ObjectId;
+  _userId?: ObjectId;
 
   @Prop()
   name: string;

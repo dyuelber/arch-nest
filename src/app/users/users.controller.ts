@@ -33,12 +33,12 @@ export class UsersController extends AbstractController<Users> {
   @Post()
   @ApiOperation(apiOperationCreate)
   @ApiResponse(apiOperationCreateResponse)
-  async create(@Body() params: object): Promise<Users> {
+  async create(@Body() params: Users): Promise<Users> {
     return await super.create(params);
   }
 
   @Put(':id')
-  async update(id: string, @Body() params: object): Promise<Users> {
+  async update(id: string, @Body() params: Users): Promise<Users> {
     return await super.update(id, params);
   }
 

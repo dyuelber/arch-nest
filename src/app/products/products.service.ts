@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Schema } from 'mongoose';
 import { AbstractService } from '../../abstract/abstract.service';
 import { Product } from './entities/product.entity';
 import { REQUEST } from '@nestjs/core';
@@ -15,8 +15,10 @@ export class ProductsService extends AbstractService<Product> {
     super(model);
   }
 
-  async beforeCreate(params: any): Promise<any> {
-    params._userId = this.request.headers._id;
+  async beforeCreate(params: Product): Promise<any> {
+    params._userId = new Schema.Types.ObjectId(
+      this.request.headers._id as string,
+    );
 
     return params;
   }
