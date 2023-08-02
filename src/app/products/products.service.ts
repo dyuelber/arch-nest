@@ -16,9 +16,10 @@ export class ProductsService extends AbstractService<Product> {
   }
 
   async beforeCreate(params: Product): Promise<any> {
-    params._userId = new Schema.Types.ObjectId(
-      this.request.headers._id as string,
-    );
+    if (!params._userId)
+      params._userId = new Schema.Types.ObjectId(
+        this.request.headers._id as string,
+      );
 
     return params;
   }

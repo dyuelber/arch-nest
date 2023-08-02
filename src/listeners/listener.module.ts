@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { UserListener } from './user.listener';
+import { ProductsModule } from '../app/products/products.module';
 
 @Module({
-  imports: [],
+  imports: [ProductsModule],
   controllers: [],
   providers: [UserListener],
 })
