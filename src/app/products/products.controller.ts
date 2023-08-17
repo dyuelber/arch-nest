@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { AbstractController } from 'src/abstract/abstract.controller';
+import { AbstractController } from '../../abstract/abstract.controller';
 import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
 import { create, update } from './validations/create-update';
