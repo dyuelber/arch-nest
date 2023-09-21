@@ -3,7 +3,7 @@ import { UsersService } from '../users.service';
 import { Users } from '../entities/user.entity';
 import { getModelToken } from '@nestjs/mongoose';
 import { MockUsers } from './mock.users';
-import { Event } from '../../../events/events.service';
+import { EventService } from '../../../events/events.service';
 import { Model } from 'mongoose';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 
@@ -20,7 +20,7 @@ describe('UsersService', () => {
 
     service = module.get<UsersService>(UsersService);
 
-    Event.dispatch = jest.fn();
+    EventService.dispatch = jest.fn();
 
     jest.clearAllMocks();
   });
