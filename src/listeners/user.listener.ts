@@ -12,7 +12,7 @@ export class UserListener {
   @OnEvent(Events.userCreate)
   create(payload: any) {
     // const product: Product = {
-    //   _userId: payload._id,
+    //   _userId: payload.data._id,
     //   name: 'Produto',
     //   amount: 1200,
     //   status: IProductStatus.pending,
