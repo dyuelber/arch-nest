@@ -3,3 +3,8 @@ export enum Events {
   userUpdate = 'user.update',
   userDelete = 'user.delete',
 }
+
+export enum TypeEvent {
+  resource = 'resource',
+  integration = 'integration',
+}
